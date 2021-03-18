@@ -1,16 +1,14 @@
 <template>
-  <div id="app">
-   
+  <div >
+    <Homepage/>
   </div>
 </template>
 
 <script>
+import Homepage from "./components/Homepage"
 export default {
-  name: 'app',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
-    }
+  components:{
+    Homepage
   }
 }
 </script>
