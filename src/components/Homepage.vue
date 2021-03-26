@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="row" style="height:655px">
     <nav id="tmSidebar" class="tm-bg-black-transparent tm-sidebar">
       <button
         class="navbar-toggler"
@@ -45,7 +45,7 @@
             <br />
             <img width="100%" />
             <!-- subcategory isimlerinin çekildiği yer -->
-            <ul class="nav nav-tabs tabLi">
+            <ul class="nav nav-tabs tabLi" style="width:250px">
               <li class="nav-item">
                 <a
                   class="nav-link"
@@ -73,6 +73,7 @@
               class="tab-pane fade show active"
               id="countertop"
               role="tabpanel"
+              style="float:left; padding:5px;"
             >
               <input
                 class="icons"
@@ -82,6 +83,7 @@
                 @click="getImage(item.img_url)"
                 width="80px"
                 height="80px"
+                style="border-radius:50%"
               />
             </div>
         
@@ -98,7 +100,7 @@
         :data-image-src="img_base_url + 'Img/' + img"
        >-->
         <img
-     style="height : 70% ; width : 100%"
+     style="height : 657px ; width : 100%"
         :src="img_base_url + 'Img/' + img"
        
       />
@@ -136,10 +138,11 @@ export default {
       .get(dataUrl)
       .then((response) => {
         // console.log(response);
-
+        
         this.resultCategory = response.data;
-
-        console.log(this.resultCategory);
+        
+        
+        
       })
       .catch((err) => {
         console.log(err.response);
@@ -148,14 +151,18 @@ export default {
   methods: {
     getImage(img_url) {
       this.img = img_url;
-      console.log(this.img);
+      //console.log(this.img);
+    },
+    getImage2(img_url) {
+      this.img = img_url;
+      //console.log(this.img);
     },
     onChange(number) {
       this.subNumber = number;
     },
     getByIdSubCategory(category_id) {
       var subCategory = this.subCategory;
-      console.log(category_id);
+      //console.log(category_id);
       var url =
         store.state.base_url + "Category/getByIdSubCategory.php?key=123";
       var datas = {
@@ -168,7 +175,8 @@ export default {
           this.subName1 = response.data.sub_categories[0].name;
           this.subName2 = response.data.sub_categories[1].name;
           this.imgColor = response.data.sub_images;
-          console.log(subCategory);
+          this.getImage2(this.imgColor[0][0].img_url);
+          //console.log(subCategory);
         })
         .catch((error) => {
           console.log(error.response);

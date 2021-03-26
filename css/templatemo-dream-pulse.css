@@ -606,7 +606,7 @@ figure.effect-bubba:hover p {
     display: none;
 }
 
-@media (max-width: 991px) {
+@media (max-width: 5000px) {
     .tm-bg-black-transparent {
         background-color: rgba(0, 0, 0, 0.5);
     }
@@ -629,8 +629,8 @@ figure.effect-bubba:hover p {
         line-height: 1;
     }
     .tm-sidebar {
-        width: 250px;
-        left: -250px;
+        width: 300px;
+        left: -300px;
         padding: 15px;
         transition: all 0.3s ease;
     }
