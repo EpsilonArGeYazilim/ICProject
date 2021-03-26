@@ -1,146 +1,111 @@
 <template>
-  <div class="wrapper d-flex align-items-stretch">
-    <nav id="sidebar" class="order-last">
-      <div class="custom-menu">
-        <button
-          type="button"
-          id="sidebarCollapse"
-          class="btn btn-primary"
-        ></button>
-      </div>
-      <div class="">
-        <nav class="navbar navbar-default">
-          <div class="container-fluid">
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
+  <div class="row">
+    <nav id="tmSidebar" class="tm-bg-black-transparent tm-sidebar">
+      <button
+        class="navbar-toggler"
+        type="button"
+        aria-label="Toggle navigation"
+      >
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <div class="container mt-2">
+        <h2>Epsilon Arge Yazılım</h2>
+       
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs tabLi">
+          <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#tab-1"
+              >Ambiance</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#tab-2">Colors</a>
+          </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content tabContainer">
+          <div id="tab-1" class="container tab-pane active">
+            
+            <img width="100%" />
+            <input
+              v-for="(item, index) in resultCategory.images"
+              :key="index"
+              type="image"
+              :src="img_base_url + 'Img/' + item.img_url"
+              @click="getByIdSubCategory(index)"
+              width="100%"
+              height="80%"
+            />
+          </div>
+
+          <!-- üst kısım ambiance kısmı -->
+          <div id="tab-2" class="container tab-pane">
+            <br />
+            <img width="100%" />
+            <!-- subcategory isimlerinin çekildiği yer -->
+            <ul class="nav nav-tabs tabLi">
               <li class="nav-item">
                 <a
-                  class="nav-link active"
-                  id="home-tab"
+                  class="nav-link"
                   data-toggle="tab"
-                  href="#home"
-                  role="tab"
-                  aria-controls="home"
-                  aria-selected="true"
-                  >Colours</a
+                  href="#tab-3"
+                  @click="onChange(0)"
+                  >{{ subName1 }}</a
                 >
               </li>
               <li class="nav-item">
                 <a
                   class="nav-link"
-                  id="profile-tab"
                   data-toggle="tab"
-                  href="#profile"
-                  role="tab"
-                  aria-controls="profile"
-                  aria-selected="false"
-                  >Ambients</a
-                >
-              </li>
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  id="contact-tab"
-                  data-toggle="tab"
-                  href="#contact"
-                  role="tab"
-                  aria-controls="contact"
-                  aria-selected="false"
-                  >Trends</a
+                  href="#tab-4"
+                  @click="onChange(1)"
+                  >{{ subName2 }}</a
                 >
               </li>
             </ul>
-            <div class="tab-content" id="myTabContent">
-              <div
-                class="tab-pane fade show active"
-                id="home"
-                role="tabpanel"
-                aria-labelledby="home-tab"
-              >
-                Renk Seçiniz
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                  <li class="nav-item">
-                    <a
-                      class="nav-link"
-                      data-toggle="tab"
-                      href="#countertop"
-                      role="tab"
-                      aria-controls="countertop"
-                      aria-selected="true"
-                      >Masa</a
-                    >
-                  </li>
-                  <li class="nav-item">
-                    <a
-                      class="nav-link"
-                      data-toggle="tab"
-                      href="#furniture"
-                      role="tab"
-                      aria-controls="furniture"
-                      aria-selected="true"
-                      >Sandalye</a
-                    >
-                  </li>
-                </ul>
-                <div
-                  v-for="(item, index) in result"
-                  :key="index"
-                  class="tab-pane fade show active"
-                  id="countertop"
-                  role="tabpanel"
-                >
-                  <!--<a slot="img_link" href="deneme" item.logo_url="" target="_blank"><img slot="img" src="https://img.epsilonarge.com/img/1560110315.png" alt="img" style="max-height: 120px; margin-right: 10px;"></a>-->
-                  <input
-                    class="icons"
-                    type="image"
-                    :src="img_base_url + 'ImgColor/' + item.img_color_url"
-                    alt=""
-                    @click="getImage(item.img_url)"
-                    width="80px"
-                    height="80px"
-                  />
-                </div>
-                <div class="tab-pane fade" id="furniture" role="tabpanel"></div>
-              </div>
-              <div
-                class="tab-pane fade"
-                id="profile"
-                role="tabpanel"
-                aria-labelledby="profile-tab"
-              >
-                <input
-                  class="ambients"
-                  type="image"
-                  src="images/ambients/1.jpg"
-                  onclick="document.getElementById('myImage').src='images/ambients/1.jpg'"
-                  width="100%"
-                  height="80%"
-                />
-                <h5 style="text-align: center"></h5>
-              </div>
-              <div
-                class="tab-pane fade"
-                id="contact"
-                role="tabpanel"
-                aria-labelledby="contact-tab"
-              ></div>
+            <!-- subcategory isimlerinin çekildiği yer -->
+
+            <div
+              v-for="(item, index) in imgColor[subNumber]"
+              :key="index"
+              class="tab-pane fade show active"
+              id="countertop"
+              role="tabpanel"
+            >
+              <input
+                class="icons"
+                type="image"
+                :src="img_base_url + 'ImgColor/' + item.img_color_url"
+                alt=""
+                @click="getImage(item.img_url)"
+                width="80px"
+                height="80px"
+              />
             </div>
+        
           </div>
-        </nav>
+        </div>
       </div>
     </nav>
 
-
-
-    <!-- Page Content  -->
-    <div id="content" class="p-4 p-md-5 pt-5">
-      <img id="myImage" :src="img_base_url + 'Img/' + img" style="width: 100%" />
-      <button onclick="document.getElementById('myImage').src='images/2.jpg'">
-        2
-      </button>
-
-
-
-    </div>
+  <div role="main" class="ml-sm-auto col-12">
+   <!-- <div
+        role="main"
+        class="parallax-window"
+        data-parallax="scroll"
+        :data-image-src="img_base_url + 'Img/' + img"
+       >-->
+        <img
+     style="height : 70% ; width : 100%"
+        :src="img_base_url + 'Img/' + img"
+       
+      />
+        
+      </div>
+      <!-- buraya kadar kalcak-->
+    <!-- </div>-->
   </div>
 </template>
 <script>
@@ -150,34 +115,65 @@ import store from "../store";
 export default {
   data() {
     return {
-      result: [],
+      subNumber: 0,
+      subName1: "",
+      subName2: "",
+      imgColor: [],
+      resultCategory: [],
+      subCategory: [],
       situation: false,
-      img : "",
+      img: "",
+      category_id: "",
       img_base_url: store.state.img_base_url,
       imgSrc: store.state.img_base_url,
     };
   },
-  
+
   mounted: function () {
     let datas = [];
-    let dataUrl = store.state.base_url + "Category/getAllImages.php?key=123";
+    let dataUrl = store.state.base_url + "Category/getAllCategory.php?key=123";
     return axios
       .get(dataUrl)
       .then((response) => {
-        //console.log(response);
-        this.result = response.data.data;
+        // console.log(response);
+
+        this.resultCategory = response.data;
+
+        console.log(this.resultCategory);
       })
       .catch((err) => {
         console.log(err.response);
       });
   },
-  methods : {
+  methods: {
+    getImage(img_url) {
+      this.img = img_url;
+      console.log(this.img);
+    },
+    onChange(number) {
+      this.subNumber = number;
+    },
+    getByIdSubCategory(category_id) {
+      var subCategory = this.subCategory;
+      console.log(category_id);
+      var url =
+        store.state.base_url + "Category/getByIdSubCategory.php?key=123";
+      var datas = {
+        category_id: category_id,
+      };
+      return axios
 
-   getImage(img_url) {
-   this.img = img_url;
-   console.log(this.img);
-   }
-
+        .post(url, JSON.stringify(datas))
+        .then((response) => {
+          this.subName1 = response.data.sub_categories[0].name;
+          this.subName2 = response.data.sub_categories[1].name;
+          this.imgColor = response.data.sub_images;
+          console.log(subCategory);
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
+    },
   },
   components: {},
 };
