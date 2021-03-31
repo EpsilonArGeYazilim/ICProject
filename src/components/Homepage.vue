@@ -1,4 +1,6 @@
 <template>
+<div :style="'background-image: url('+img_base_url + 'Img/' + image+');'">
+{{image}}
   <div class="row" style="height: 655px">
     <nav id="tmSidebar" class="tm-bg-black-transparent tm-sidebar">
       <button
@@ -72,17 +74,19 @@
               style="float: left; padding: 5px"
             >
               <input
-                v-for="(item, index) in color1Datas"
+                v-for="(item, index) in color1ids"
+                :color1_id="item"
                 :key="index"
                 class="icons"
                 type="image"
-                :src="img_base_url + 'ImgColor/' + item.color1_url"
+                :src="img_base_url + 'ImgColor/' + color1Datas[item].color1_url"
                 alt=""
-                @click="color1Click(item.color1_id)"
+                @click="color1Click(color1Datas[item].color1_id)"
                 width="80px"
                 height="80px"
                 style="border-radius: 50%"
               />
+       
               <!--UFAK RESİMLER ÜSTTEN ÇEKİLİYO-->
             </div>
 
@@ -95,12 +99,13 @@
             >
               <input
                 v-for="(item, index) in color2ids"
+                :color2_id="item"
                 :key="index"
                 class="icons"
                 type="image"
                 :src="img_base_url + 'ImgColor/' + color2Datas[item].color2_url"
                 alt=""
-                @click="color2Click(item.color2_id)"
+                @click="color2Click(color2Datas[item].color2_id)"
                 width="80px"
                 height="80px"
                 style="border-radius: 50%"
@@ -112,13 +117,8 @@
       </div>
     </nav>
 
-    <div role="main" class="ml-sm-auto col-12">
-      <img
-        style="height: 657px; width: 100%"
-        :src="img_base_url + 'Img/' + img"
-      />
-    </div>
   </div>
+</div>
 </template>
 <script>
 import axios from "axios";
@@ -146,7 +146,6 @@ export default {
       resultCategory: [],
       subCategory: [],
       situation: false,
-      img: "",
       tabNumber: "",
       category_id: "",
       img_base_url: store.state.img_base_url,
@@ -155,7 +154,8 @@ export default {
   },
 
   mounted: function () {
-    let datas = [];
+
+
     let dataUrl = store.state.base_url + "Category/getAllCategory.php?key=123";
     return axios
       .get(dataUrl)
@@ -163,42 +163,45 @@ export default {
         this.categoryDatas = response.data.categories;
         this.categoryImages = response.data.categoryFirstImage;
         for (var index in this.categoryImages) {
-          this.img = this.categoryImages[index].img_url; // geçici
+          this.image = this.categoryImages[index].img_url; // geçici
           break;
         }
-       // console.log(this.categoryDatas);
+
       })
       .catch((err) => {
         console.log(err.response);
       });
   },
   methods: {
-    getImage(img_url) {
-      this.img = img_url;
-      //console.log(this.img);
-    },
     imageChange() {
-      this.image =
-        this.color1 + "_" + this.color2 + "_" + this.category_id + ".jpg";
+
+
+      for(var index in this.imagesDatas)
+      {
+      
+        if((this.imagesDatas[index].color1_id == this.color1) && (this.imagesDatas[index].color2_id == this.color2))
+        {
+          this.image = this.imagesDatas[index].img_url;
+          break;
+        }
+      }
+
     },
     onChange(number) {
       this.tabNumber = number;
     },
-    getImage2(img_url) {
-      this.img = img_url;
-      //console.log(this.img);
-    },
+
     color1Click(color1_id) {
       this.color1 = color1_id;
-    
-      this.color2Changeids();
       this.imageChange();
+      this.color2Changeids();
+    
     },
     color2Click(color2_id) {
-      this.color1 = color2_id;
-      
-      this.color1Changeids();
+      this.color2 = color2_id;
       this.imageChange();
+      this.color1Changeids();
+      
     },
     color2Changeids() {
       this.color2ids = [];
@@ -207,19 +210,17 @@ export default {
         if (this.imagesDatas[item].color1_id == this.color1) {
             console.log(this.imagesDatas[item])
           this.color2ids.push(this.imagesDatas[item].color2_id);
-         // console.log("color2changeids bulundu ");
          
         }
       }
-     // console.log(this.color2ids);
+
     },
     color1Changeids() {
       this.color1ids = [];
-      for (item in this.imagesDatas) {
-        if (item.color2_id == this.color2) {
-          this.color1ids.add.item(item.color1_id);
-         
-         // console.log("color1changeids bulundu ");
+      for (var item in this.imagesDatas) {
+
+        if (this.imagesDatas[item].color2_id == this.color2) {
+            this.color1ids.push(this.imagesDatas[item].color1_id);
           
         }
       }
@@ -228,7 +229,11 @@ export default {
     getByIdCategoryAllDatas(category_id) {
       this.tabNumber = 0;
       this.category_id = category_id;
-     // console.log(category_id);
+
+      var imageChange = this.imageChange;
+
+      this.color1ids = [];
+      this.color2ids = [];
 
       this.subName1 = this.categoryDatas[this.category_id].sub1_name;
       this.subName2 = this.categoryDatas[this.category_id].sub2_name;
@@ -238,17 +243,34 @@ export default {
       var datas = {
         category_id: category_id,
       };
-      return axios
+      axios
         .post(url, JSON.stringify(datas))
         .then((response) => {
           this.color1Datas = response.data.color1datas;
           this.color2Datas = response.data.color2datas;
           this.imagesDatas = response.data.imagesdatas;
+
+
+          this.color1=this.imagesDatas[0].color1_id;
+          this.color2=this.imagesDatas[0].color2_id;
+
+        imageChange();
+
+        for (var item in this.imagesDatas) {
+
+          this.color1ids.push(this.imagesDatas[item].color1_id);
+           this.color2ids.push(this.imagesDatas[item].color2_id);
+
+            }
         
         })
         .catch((error) => {
           console.log(error.response);
         });
+
+
+    
+
     },
   },
   components: {},
